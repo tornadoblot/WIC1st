@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <script>
+        var string = "test";
+
+        $(function() {
+            $('#call').click(function() {
+                $('#show').html('....loading...');
+
+                $.ajax({
+                    type: "GET",
+                    url: "http://openapi.seoul.go.kr:8088/7a6b66614d69726537326945575544/json/InfoTrdarFlpop/1/1/201807/001519",
+                    success: function(data) {
+                        $('#show').html(JSON.stringify(data));
+                        string = JSON.stringify(data);
+                        $('#time').html(JSON.stringify(data.InfoTrdarFlpop.list_total_count));
+                        alert(JSON.stringify(data.InfoTrdarFlpop.list_total_count));
+                    }
+                })
+            })
+        })
+
+    </script>
+    <button id="call">클릭!</button>
+    <p id="show"></p>
+    <p id="time"></p>
+</body>
+
+</html>

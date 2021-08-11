@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>테스트테스트</title>
+    <style>
+        .area {
+            position: absolute;
+            background: #fff;
+            border: 1px solid #888;
+            border-radius: 3px;
+            font-size: 12px;
+            top: -5px;
+            left: 15px;
+            padding: 2px;
+        }
+
+        .info {
+            font-size: 12px;
+            padding: 5px;
+        }
+
+        .info .title {
+            font-weight: bold;
+        }
+        
+    </style>
+</head>
+
+<body>
+
+    <div id="map" style="width:100%;height:350px;"></div>
+
+
+    <button id="call" onclick="callbtn()">클릭!</button>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=59f5b9d7c20d562ba961cda0d42c961c"></script>
+
+    <script>
+        var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+            mapOption = {
+                center: new daum.maps.LatLng(37.545105, 126.965464), // 지도의 중심좌표
+                level: 1 // 지도의 확대 레벨
+            };
+
+
+        var map = new daum.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+
+var imageSrc = 'https://i.imgur.com/jsASwx2.png', // 마커이미지의 주소입니다    
+    imageSize = new daum.maps.Size(40, 50), // 마커이미지의 크기입니다
+    imageOption = {offset: new daum.maps.Point(27, 69)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+      
+// 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
+var markerImage = new daum.maps.MarkerImage(imageSrc, imageSize, imageOption),
+    markerPosition = new daum.maps.LatLng(37.544052, 126.970905); // 마커가 표시될 위치입니다
+
+// 마커를 생성합니다
+var marker = new daum.maps.Marker({
+    position: markerPosition, 
+    image: markerImage // 마커이미지 설정 
+});
+
+// 마커가 지도 위에 표시되도록 설정합니다
+marker.setMap(map);  
+</script>
+</body>
+
+</html>

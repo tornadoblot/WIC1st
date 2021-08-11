@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>테스트테스트</title>
+    <style>
+        .area {
+            position: absolute;
+            background: #fff;
+            border: 1px solid #888;
+            border-radius: 3px;
+            font-size: 12px;
+            top: -5px;
+            left: 15px;
+            padding: 2px;
+        }
+
+        .info {
+            font-size: 12px;
+            padding: 5px;
+        }
+
+        .info .title {
+            font-weight: bold;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div id="map" style="width:100%;height:350px;"></div>
+
+    <button id="call" onclick="callbtn()">클릭!</button>
+    <a href="index_fp.html">유동인구지도</a>
+    <a href="index_police.html">경찰지도</a>
+    <a href="index_store.html">상점활성화도></a>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=59f5b9d7c20d562ba961cda0d42c961c"></script>
+
+    <script>
+        function callbtn() {
+            for (var i = 0, len = areas.length; i < len; i++) {
+                displayArea(areas[i]);
+            }
+            
+            displayArea(areas[2]);
+        }
+
+        var cp47fp = new Array(7);
+        var cp45fp = new Array(7);
+        var cp49fp = new Array(7);
+
+        var d = new Date().getHours();
+
+        // 서울시 공공 데이터 api 청파로47길 수집 함수
+        $(function() {
+            $.ajax({
+                type: "GET",
+                url: "http://openapi.seoul.go.kr:8088/7a6b66614d69726537326945575544/json/InfoTrdarFlpop/1/1/201807/001519",
+                success: function(data) {
+                    cp47FloatingPop(data);
+                },
+                error: function(xhr, status, error) {
+                    alert("청파로47길 api를 가져오는 중 에러가 발생했습니다. \n웹사이트 이용에 오류가 발생할 수 있습니다.")
+                }
+            })
+        })
+
+        // 서울시 공공 데이터 api 청파로45길 수집 함수
+        $(function() {
+            $.ajax({
+                type: "GET",
+                url: "http://openapi.seoul.go.kr:8088/7a6b66614d69726537326945575544/json/InfoTrdarFlpop/1/1/201807/001518",
+                success: function(data) {
+                    cp45FloatingPop(data);
+                },
+                error: function(xhr, status, error) {
+                    alert("청파로45길 api를 가져오는 중 에러가 발생했습니다. \n웹사이트 이용에 오류가 발생할 수 있습니다.")
+                }
+            })
+        })
+
+        // 서울시 공공 데이터 api 청파로49길 수집 함수
+        $(function() {
+            $.ajax({
+                type: "GET",
+                url: "http://openapi.seoul.go.kr:8088/7a6b66614d69726537326945575544/json/InfoTrdarFlpop/1/1/201807/001520",
+                success: function(data) {
+                    cp49FloatingPop(data);
+                },
+                error: function(xhr, status, error) {
+                    alert("청파로49길 api를 가져오는 중 에러가 발생했습니다. \n웹사이트 이용에 오류가 발생할 수 있습니다.")
+                }
+            })
+        })
+
+        //입력된 데이터의 평균 유동인구를 구하는 함수
+        function cp47FloatingPop(data) {
+            cp47fp[6] = 0;
+
+            cp47fp[0] = data.InfoTrdarFlpop.row[0].TMZON_1_FLPOP_CO;
+            cp47fp[1] = data.InfoTrdarFlpop.row[0].TMZON_2_FLPOP_CO;
+            cp47fp[2] = data.InfoTrdarFlpop.row[0].TMZON_3_FLPOP_CO;
+            cp47fp[3] = data.InfoTrdarFlpop.row[0].TMZON_4_FLPOP_CO;
+            cp47fp[4] = data.InfoTrdarFlpop.row[0].TMZON_5_FLPOP_CO;
+            cp47fp[5] = data.InfoTrdarFlpop.row[0].TMZON_6_FLPOP_CO;
+
+            for (var i = 0; i < cp47fp.length - 1; i++) {
+                cp47fp[6] += cp47fp[i];
+            }
+
+            cp47fp[6] = Math.floor(cp47fp[6] / 6);
+        }
+
+        function cp45FloatingPop(data) {
+            cp45fp[6] = 0;
+
+            cp45fp[0] = data.InfoTrdarFlpop.row[0].TMZON_1_FLPOP_CO;
+            cp45fp[1] = data.InfoTrdarFlpop.row[0].TMZON_2_FLPOP_CO;
+            cp45fp[2] = data.InfoTrdarFlpop.row[0].TMZON_3_FLPOP_CO;
+            cp45fp[3] = data.InfoTrdarFlpop.row[0].TMZON_4_FLPOP_CO;
+            cp45fp[4] = data.InfoTrdarFlpop.row[0].TMZON_5_FLPOP_CO;
+            cp45fp[5] = data.InfoTrdarFlpop.row[0].TMZON_6_FLPOP_CO;
+
+            for (var i = 0; i < cp45fp.length - 1; i++) {
+                cp45fp[6] += cp45fp[i];
+            }
+
+            cp45fp[6] = Math.floor(cp45fp[6] / 6);
+        }
+
+        function cp49FloatingPop(data) {
+            cp49fp[6] = 0;
+
+            cp49fp[0] = data.InfoTrdarFlpop.row[0].TMZON_1_FLPOP_CO;
+            cp49fp[1] = data.InfoTrdarFlpop.row[0].TMZON_2_FLPOP_CO;
+            cp49fp[2] = data.InfoTrdarFlpop.row[0].TMZON_3_FLPOP_CO;
+            cp49fp[3] = data.InfoTrdarFlpop.row[0].TMZON_4_FLPOP_CO;
+            cp49fp[4] = data.InfoTrdarFlpop.row[0].TMZON_5_FLPOP_CO;
+            cp49fp[5] = data.InfoTrdarFlpop.row[0].TMZON_6_FLPOP_CO;
+
+            for (var i = 0; i < cp49fp.length - 1; i++) {
+                cp49fp[6] += cp49fp[i];
+            }
+
+            cp49fp[6] = Math.floor(cp49fp[6] / 6);
+        }
+
+
+        // 다음지도 api 정보 설정
+        var areas = [{
+                name: '청파로47길',
+                path: [
+                    new daum.maps.LatLng(37.545035, 126.963599),
+                    new daum.maps.LatLng(37.545216, 126.964821),
+                    new daum.maps.LatLng(37.545180, 126.965448),
+                    new daum.maps.LatLng(37.544748, 126.967956),
+                    new daum.maps.LatLng(37.544926, 126.970400),
+                    new daum.maps.LatLng(37.544818, 126.970421),
+                    new daum.maps.LatLng(37.544668, 126.968335),
+                    new daum.maps.LatLng(37.544648, 126.967912),
+                    new daum.maps.LatLng(37.545080, 126.965427),
+                    new daum.maps.LatLng(37.545101, 126.964821),
+                    new daum.maps.LatLng(37.544923, 126.963657),
+                ],
+                danger: 0,
+                color: '#000000',
+                fp: cp47fp,
+                shop: 2,
+                police: 0,
+            },
+
+            {
+                name: '청파로45길',
+                path: [
+                    new daum.maps.LatLng(37.544664, 126.968269),
+                    new daum.maps.LatLng(37.544258, 126.970556),
+                    new daum.maps.LatLng(37.544162, 126.970574),
+                    new daum.maps.LatLng(37.544650, 126.967927),
+                ],
+                danger: 0,
+                color: '#000000',
+                fp: cp45fp,
+                shop: 3,
+                police: 0,
+            },
+
+            {
+                name: '청파로49길',
+                path: [
+                    new daum.maps.LatLng(37.545005, 126.966980),
+                    new daum.maps.LatLng(37.545040, 126.967392),
+                    new daum.maps.LatLng(37.545151, 126.967461),
+                    new daum.maps.LatLng(37.545243, 126.967615),
+                    new daum.maps.LatLng(37.545361, 126.968232),
+                    new daum.maps.LatLng(37.545327, 126.968330),
+                    new daum.maps.LatLng(37.545461, 126.968704),
+                    new daum.maps.LatLng(37.545300, 126.969760),
+                    new daum.maps.LatLng(37.545310, 126.970455),
+                    new daum.maps.LatLng(37.545238, 126.970468),
+                    new daum.maps.LatLng(37.545218, 126.969678),
+                    new daum.maps.LatLng(37.545362, 126.968688),
+                    new daum.maps.LatLng(37.545273, 126.968333),
+                    new daum.maps.LatLng(37.545303, 126.968179),
+                    new daum.maps.LatLng(37.545196, 126.967691),
+                    new daum.maps.LatLng(37.545085, 126.967503),
+                    new daum.maps.LatLng(37.544955, 126.967416),
+                    new daum.maps.LatLng(37.544918, 126.966954),
+                ],
+                danger: 0,
+                color: '#000000',
+                fp: cp49fp,
+                shop: 4,
+                police: 1,
+            },
+        ];
+
+        var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+            mapOption = {
+                center: new daum.maps.LatLng(37.545105, 126.965464), // 지도의 중심좌표
+                level: 1 // 지도의 확대 레벨
+            };
+
+
+        var map = new daum.maps.Map(mapContainer, mapOption),
+            customOverlay = new daum.maps.CustomOverlay({}),
+            infowindow = new daum.maps.InfoWindow({
+                removable: true
+            });     
+
+
+        // 다각형을 생상하고 이벤트를 등록하는 함수입니다
+        function displayArea(area) {
+
+            var dangerfp = "낮음";
+            var dangershop = "낮음";
+            var dangerpolice = "존재";
+            // 유동인구 위험도 산정
+            switch (d) {
+                case 0:
+                case 1:
+                case 2:
+                case 3:
+                    if (area.fp[0] < area.fp[6]) {
+                        area.danger += 1;
+                        dangerfp = "높음";
+                    }
+                    break;
+                case 4:
+                case 5:
+                case 6:
+                case 7:
+                    if (area.fp[1] < area.fp[6]) {
+                        area.danger += 1;
+                        dangerfp = "높음";
+                        }
+                    break;
+                case 8:
+                case 9:
+                case 10:
+                case 11:
+                    if (area.fp[2] < area.fp[6]) {
+                        area.danger += 1;
+                        dangerfp = "높음";
+                    }
+                    break;
+                case 12:
+                case 13:
+                case 14:
+                case 15:
+                    if (area.fp[3] < area.fp[6]){
+                        area.danger += 1;
+                        dangerfp = 1;
+                    }
+                    break;
+                case 16:
+                case 17:
+                case 18:
+                case 19:
+                    if (area.fp[4] < area.fp[6]) {
+                        area.danger += 1;
+                        dangerfp = 1;
+                    }
+                    break;
+                case 20:
+                case 21:
+                case 22:
+                case 23:
+                    if (area.fp[5] < area.fp[6]) {
+                        area.danger += 1;
+                        dangerfp = 1;
+                    }
+                    break;
+            }
+
+            // 상점 활성화 점수 위험도 산정
+            if (area.shop >= 3) {
+                area.danger += 1;
+                dangershop = "높음";
+            }
+
+            // 경찰서 위험도 산정
+            if(area.police) {
+                area.danger += 1;
+                dangerpolice = "없음";
+            }
+
+
+            // 위험도에 따른 색 선정
+            switch (area.danger) {
+                case 0:
+                    area.color = '#11eeb9'
+                    break;
+                case 1:
+                    area.color = '#ffff00'
+                    break;
+                case 2:
+                    area.color = '#000000'
+                    break;
+                case 3:
+                    area.color = 'ff506d'
+                    break;
+            }
+
+
+            // 다각형을 생성합니다 
+            var polygon = new daum.maps.Polygon({
+                map: map, // 다각형을 표시할 지도 객체
+                path: area.path,
+                strokeWeight: 0,
+                fillColor: area.color,
+                fillOpacity: 0.65
+            });
+
+            // 다각형에 mouseover 이벤트를 등록하고 이벤트가 발생하면 폴리곤의 채움색을 변경합니다 
+            // 지역명을 표시하는 커스텀오버레이를 지도위에 표시합니다
+            daum.maps.event.addListener(polygon, 'mouseover', function(mouseEvent) {
+                polygon.setOptions({
+                    fillOpacity: 0.8
+                });
+
+                customOverlay.setContent('<div class="area">' + area.name + '</div>');
+
+                customOverlay.setPosition(mouseEvent.latLng);
+                customOverlay.setMap(map);
+            });
+
+            // 다각형에 mousemove 이벤트를 등록하고 이벤트가 발생하면 커스텀 오버레이의 위치를 변경합니다 
+            daum.maps.event.addListener(polygon, 'mousemove', function(mouseEvent) {
+
+                customOverlay.setPosition(mouseEvent.latLng);
+            });
+
+            // 다각형에 mouseout 이벤트를 등록하고 이벤트가 발생하면 폴리곤의 채움색을 원래색으로 변경합니다
+            // 커스텀 오버레이를 지도에서 제거합니다 
+            daum.maps.event.addListener(polygon, 'mouseout', function() {
+                polygon.setOptions({
+                    fillOpacity: 0.65
+                });
+                customOverlay.setMap(null);
+            });
+
+            // 다각형에 click 이벤트를 등록하고 이벤트가 발생하면 다각형의 이름과 면적을 인포윈도우에 표시합니다 
+            daum.maps.event.addListener(polygon, 'click', function(mouseEvent) {
+                var content = '<div class="info">' +
+                    '   <div class="title">' + area.name + '</div>' +
+                    '   <div class="danger">위험도 : ' + area.danger + '</div>' +
+                    '   <div class="floatingpeople">유동인구 위험도 : ' + dangerfp + '</div>' +
+                    '   <div class="market">상권 활성화 : ' + dangershop + '</div>' +
+                    '   <div class="police">주변 경찰서 : ' + dangerpolice + '</div>' +
+                    '</div>';
+
+                infowindow.setContent(content);
+                infowindow.setPosition(mouseEvent.latLng);
+                infowindow.setMap(map);
+            });
+        }
+
+    </script>
+</body>
+
+</html>
